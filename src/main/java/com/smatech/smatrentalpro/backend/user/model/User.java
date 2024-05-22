@@ -35,8 +35,13 @@ public class User implements UserDetails {
   @Column(unique = true)
   private String username;
   private int approved;
+  private boolean verified;
+  private boolean active;
   @Lob
   private Byte[] image;
+
+  @Column(name = "reset_token")
+  private String resetPasswordToken;
 
   @Enumerated(EnumType.STRING)
   private Role role;

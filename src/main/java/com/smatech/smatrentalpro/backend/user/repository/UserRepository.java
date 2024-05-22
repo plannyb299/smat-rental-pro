@@ -15,4 +15,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
   List<User> findByApproved(int approved);
 
 
+    User findByResetPasswordToken(String token);
 }
