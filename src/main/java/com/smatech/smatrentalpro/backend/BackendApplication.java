@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @Slf4j
-@EnableWebSecurity
-@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+//@EnableWebSecurity
+//@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 public class BackendApplication {
 

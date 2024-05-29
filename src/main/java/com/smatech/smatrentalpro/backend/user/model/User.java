@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -85,5 +86,26 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+            "id=" + id +
+            ", firstname='" + firstname + '\'' +
+            ", lastname='" + lastname + '\'' +
+            ", email='" + email + '\'' +
+            ", password='" + password + '\'' +
+            ", telephone='" + telephone + '\'' +
+            ", username='" + username + '\'' +
+            ", approved=" + approved +
+            ", verified=" + verified +
+            ", active=" + active +
+            ", image=" + Arrays.toString(image) +
+            ", resetPasswordToken='" + resetPasswordToken + '\'' +
+            ", role=" + role +
+            ", tokens=" + tokens +
+            ", myHomeList=" + myHomeList +
+            '}';
   }
 }
