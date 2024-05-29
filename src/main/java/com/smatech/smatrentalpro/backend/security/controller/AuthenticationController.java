@@ -1,10 +1,7 @@
 package com.smatech.smatrentalpro.backend.security.controller;
 
 import com.smatech.smatrentalpro.backend.exception.ResourceNotFoundException;
-import com.smatech.smatrentalpro.backend.security.models.AuthenticationRequest;
-import com.smatech.smatrentalpro.backend.security.models.AuthenticationResponse;
-import com.smatech.smatrentalpro.backend.security.models.RegisterRequest;
-import com.smatech.smatrentalpro.backend.security.models.SmatRentalApiResp;
+import com.smatech.smatrentalpro.backend.security.models.*;
 import com.smatech.smatrentalpro.backend.security.service.AuthenticationService;
 import com.smatech.smatrentalpro.backend.user.model.User;
 import com.smatech.smatrentalpro.backend.user.service.UserService;
@@ -47,11 +44,10 @@ public class AuthenticationController {
     return ResponseEntity.ok(service.authenticate(request));
   }
 
-  @PostMapping("/confirm_account")
-  public ResponseEntity<SmatRentalApiResp> confirm(@RequestParam("username") String username,
-                                                   @RequestParam("code") String code) {
+  @PostMapping("/confirm-account")
+  public ResponseEntity<SmatRentalApiResp> confirm(@RequestBody AccountConfirmation request) {
 
-    if (service.confirmUserAccount(username, code)) {
+    if (service.confirmUserAccount(request.getUsername(), request.getCode())) {
       return ResponseEntity.ok(new SmatRentalApiResp("User confirmed successfully"));
     } else
       return ResponseEntity.badRequest().body(new SmatRentalApiResp("Failed to confirm user account"));

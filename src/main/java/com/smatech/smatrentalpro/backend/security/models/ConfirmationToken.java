@@ -3,14 +3,13 @@ package com.smatech.smatrentalpro.backend.security.models;
 import com.smatech.smatrentalpro.backend.commons.AbstractEntity;
 import com.smatech.smatrentalpro.backend.user.model.User;
 import jakarta.persistence.*;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-/**
- * @author Chirinda Nyasha Dell 23/11/2021
- */
-
+@Data
 @Entity
 @Table(name = "confirmation_tokens")
 public class ConfirmationToken extends AbstractEntity {
@@ -26,6 +25,7 @@ public class ConfirmationToken extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(nullable = false, name = "user_id")
+    @ToString.Exclude
     private User user;
 
     public String getToken() {

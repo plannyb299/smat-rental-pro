@@ -154,9 +154,9 @@ public class AuthenticationService {
   }
 
   public boolean confirmUserAccount(String username, String verificationCode) {
-    log.debug("User Confirmation Request username: {}, verificationCode: {}", username, verificationCode);
 
-    User user =  repository.findByUsername(username)
+    User user = new User();
+     user = repository.findByUsername(username)
             .orElseThrow(() -> new ResourceNotFoundException("User", "Username", username));
 
     ConfirmationToken confirmationToken = confirmationTokenRepository.findConfirmationTokenByToken(verificationCode)
@@ -166,23 +166,23 @@ public class AuthenticationService {
       throw new ValidationException("Verification Failed. Invalid verification code");
     }
 
-    if (user.isVerified() || confirmationToken.getDateConfirmed() != null) {
-      throw new ValidationException("Verification code already confirmed.");
-    }
+//    if (user.isVerified() || confirmationToken.getDateConfirmed() != null) {
+//      throw new ValidationException("Verification code already confirmed.");
+//    }
 
-    if (confirmationToken.getExpirationDate().isBefore(LocalDateTime.now())) {
-      throw new ValidationException("Verification Code already expired.");
-    }
+//    if (confirmationToken.getExpirationDate().isBefore(LocalDateTime.now())) {
+//      throw new ValidationException("Verification Code already expired.");
+//    }
 
-    log.info("Confirming new User - {}", user);
-    user.setVerified(true);
-    user.setActive(true);
-    repository.save(user);
+//    user.setVerified(true);
+//    user.setActive(true);
+//    repository.save(user);
 
     confirmationToken.setDateConfirmed(LocalDateTime.now());
     confirmationTokenRepository.save(confirmationToken);
     return true;
   }
+
 
   public void updateResetPasswordToken(String token, String email) throws ResourceNotFoundException {
     User user = repository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User", "Email", email));;
@@ -213,7 +213,7 @@ public class AuthenticationService {
     MimeMessage message = mailSender.createMimeMessage();
     MimeMessageHelper helper = new MimeMessageHelper(message);
 
-    helper.setFrom("panasherutimhu0@gmail.com", "SmatRentalPro Application");
+    helper.setFrom("plannyb29@gmail.com", "SmatRentalPro Application");
     helper.setTo(recipientEmail);
 
     String subject = "Here's the link to reset your password";

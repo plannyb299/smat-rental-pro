@@ -1,5 +1,6 @@
 package com.smatech.smatrentalpro.backend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,11 +13,23 @@ import java.util.Properties;
 @Configuration
 public class EmailConfig {
 
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
+    @Value("${spring.mail.port}")
+    private String port;
+
+    @Value("${spring.mail.password}")
+    private String password;
+
+    @Value("${spring.mail.host}")
+    private String host;
+
     @Bean
     public SimpleMailMessage emailTemplate() {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo("recipient@email.com");
-        message.setFrom("panasherutimhu0@gmail.com");
+        message.setFrom("plannyb29@gmail.com");
         message.setSubject("SmatRentalPro Application - Account Verification");
         message.setText("FATAL - Application crash. Save your job !!");
         return message;
@@ -25,11 +38,11 @@ public class EmailConfig {
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(25);
+        mailSender.setHost(host);
+        mailSender.setPort(Integer.parseInt(port));
 
-        mailSender.setUsername("panasherutimhu0@gmail.com");
-        mailSender.setPassword("password");
+        mailSender.setUsername(fromEmail);
+        mailSender.setPassword(password);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

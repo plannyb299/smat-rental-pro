@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 public class HouseResponse {
 
+    private String id;
     private String street;
     private Integer rooms;
     private Integer bedrooms;
