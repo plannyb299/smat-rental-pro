@@ -7,12 +7,14 @@ import com.smatech.smatrentalpro.backend.house.model.Reservation;
 import com.smatech.smatrentalpro.backend.house.service.HostService;
 import com.smatech.smatrentalpro.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ReservationConverter {
 
     private final HostService hostService;
@@ -34,10 +36,9 @@ public class ReservationConverter {
         ReservationRes reservationDto = new ReservationRes();
         reservationDto.setReservationId(reservation.getReservationId());
         reservationDto.setBookedDate(reservation.getBookedDate());
-        reservationDto.setLeaveDate(reservation.getLeaveDate());
-        reservationDto.setBookedHomeId(reservation.getBookedHome().getId());
-        reservationDto.setUserIdBooked(reservation.getUserBooked().getId());
-        reservationDto.setUserNameBooked(reservation.getUserBooked().getUsername());
+        reservationDto.setBookedHomeId(reservation.getBookedHome());
+        reservationDto.setUserIdBooked(reservation.getUserBooked());
+        reservationDto.setUserNameBooked(userServiceStatic.findById(reservation.getUserBooked()).getUsername());
 
         reservationDto.setHomeReviewDescription(reservation.getHomeReviewDescription());
         if(reservation.getHomeReviewStars()==null)reservationDto.setHomeReviewStars(0);
@@ -53,16 +54,17 @@ public class ReservationConverter {
 
     public static Reservation convert(ReservationReq reservationDto) {
         Reservation reservation = new Reservation();
-        reservation.setReservationId(reservationDto.getReservationId());
         reservation.setBookedDate(reservationDto.getBookedDate());
         reservation.setLeaveDate(reservationDto.getLeaveDate());
-        reservation.setBookedHome(HouseProcessor.convertHouseRes(hostServiceStatic.findHomeById(reservationDto.getBookedHomeId())));
-        reservation.setUserBooked(userServiceStatic.findById(reservationDto.getUserIdBooked()));
+        reservation.setBookedHome(reservationDto.getBookedHomeId());
+        reservation.setUserBooked(reservationDto.getUserIdBooked());
 
         reservation.setHomeReviewDescription(reservationDto.getHomeReviewDescription());
         reservation.setHomeReviewStars(reservationDto.getHomeReviewStars());
         reservation.setHostReviewDescription(reservationDto.getHostReviewDescription());
         reservation.setHostReviewStars(reservationDto.getHostReviewStars());
+
+        log.info("RESERVATION: {}", reservation);
         return reservation;
     }
 }

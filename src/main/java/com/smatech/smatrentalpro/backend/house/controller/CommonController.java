@@ -3,6 +3,7 @@ package com.smatech.smatrentalpro.backend.house.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.smatech.smatrentalpro.backend.house.dto.request.ReservationReq;
+import com.smatech.smatrentalpro.backend.house.dto.response.ReservationRes;
 import com.smatech.smatrentalpro.backend.house.service.HostService;
 import com.smatech.smatrentalpro.backend.house.service.ReservationService;
 import com.smatech.smatrentalpro.backend.user.dto.UserDto;
@@ -20,15 +21,14 @@ import org.springframework.web.bind.annotation.*;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.security.Principal;
+import java.util.List;
 
 import static com.smatech.smatrentalpro.backend.utils.Helpers.convertToJson;
 
-
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/secure")
-@PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+@RequestMapping("/api/v1/booking")
+//@PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
 public class CommonController {
 
     private final UserService userService;
@@ -70,12 +70,24 @@ public class CommonController {
     }
 
     @PostMapping("/home/book")
-    public ResponseEntity<String> booking(@RequestBody ReservationReq reservationDto, Principal principal) throws Exception {
-        User user = userService.findByUsername(principal.getName());
+    public ResponseEntity<ReservationRes> booking(@RequestBody ReservationReq reservationDto) throws Exception {
+        User user = userService.findByUsername(reservationDto.getUserNameBooked());
         if(user.getRole() !=null)
-            return ResponseEntity.ok().body(convertToJson(reservationService.save(reservationDto)));
+            return ResponseEntity.ok().body(reservationService.save(reservationDto));
         else
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"Status\": \"Error booking the room\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    @GetMapping("/home/{id}")
+    public ResponseEntity<String> getBookingById(@RequestParam("id") String id) throws Exception {
+
+            return ResponseEntity.ok().body(convertToJson(reservationService.findReservationDtoById(id)));
+    }
+
+    @PostMapping("/home/getAllBookings")
+    public ResponseEntity<List<ReservationRes>> getAllBookings() throws Exception {
+
+        return ResponseEntity.ok().body(reservationService.findAll());
     }
 
     @PutMapping("/home/book")

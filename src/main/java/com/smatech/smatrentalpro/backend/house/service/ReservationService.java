@@ -13,4 +13,6 @@ public interface ReservationService {
     Reservation findReservationById(String id);
     List<ReservationRes> findAll();
     ReservationRes save(ReservationReq reservationDto);
+
+    List<ReservationRes> findReservationByUserId(Integer id);
 }

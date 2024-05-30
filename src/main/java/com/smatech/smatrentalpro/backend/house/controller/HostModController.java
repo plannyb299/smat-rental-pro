@@ -3,7 +3,9 @@ package com.smatech.smatrentalpro.backend.house.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.smatech.smatrentalpro.backend.house.dto.request.HouseRequest;
+import com.smatech.smatrentalpro.backend.house.dto.response.ReservationRes;
 import com.smatech.smatrentalpro.backend.house.service.HostService;
+import com.smatech.smatrentalpro.backend.house.service.ReservationService;
 import com.smatech.smatrentalpro.backend.user.model.User;
 import com.smatech.smatrentalpro.backend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 import static com.smatech.smatrentalpro.backend.utils.Helpers.convertToJson;
 
@@ -27,6 +30,9 @@ public class HostModController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ReservationService reservationService;
+
     @GetMapping("/{id}/homes")
     public ResponseEntity<String> getHostHomes(@PathVariable("id") int id)  throws JsonProcessingException {
         User user = userService.findById(id);
@@ -35,6 +41,12 @@ public class HostModController {
             return ResponseEntity.ok().body("{\"message\": \"Host Isn't approved yet by administrator\"}");
         else
             return ResponseEntity.ok().body(convertToJson(hostService.findByUserId(id)));
+    }
+
+    @GetMapping("/bookedHomes/{id}")
+    public ResponseEntity<List<ReservationRes>> getUserBookedHomes(@PathVariable("id") int id)  throws JsonProcessingException {
+
+            return ResponseEntity.ok().body(reservationService.findReservationByUserId(id));
     }
 
     @GetMapping("/{username}/homes")

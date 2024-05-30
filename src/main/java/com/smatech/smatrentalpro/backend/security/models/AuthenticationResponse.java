@@ -1,6 +1,7 @@
 package com.smatech.smatrentalpro.backend.security.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.smatech.smatrentalpro.backend.security.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,13 @@ public class AuthenticationResponse {
 
   @JsonProperty("username")
   private String username;
-//
-//  @JsonProperty("image")
-//  private Byte[] image;
+
+  @JsonProperty("user_id")
+  private Integer userId;
+
+  @JsonProperty("role")
+  private Role role;
+
+  @JsonProperty("image")
+  private Byte[] image;
 }

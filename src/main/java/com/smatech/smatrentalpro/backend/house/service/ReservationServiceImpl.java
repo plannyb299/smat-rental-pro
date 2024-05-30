@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,18 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation;
         reservation = reservationRepository.findById(id).get();
         return ReservationConverter.convertToDto(reservation);
+    }
+
+    @Override
+    public List<ReservationRes> findReservationByUserId(Integer id) {
+
+        List<ReservationRes> response = new ArrayList<>();
+        List<Reservation> reservation = reservationRepository.findByUserBooked(id);
+        for(Reservation reservation1 : reservation) {
+           ReservationRes res = ReservationConverter.convertToDto(reservation1);
+            response.add(res);
+        }
+        return response;
     }
 
     @Override

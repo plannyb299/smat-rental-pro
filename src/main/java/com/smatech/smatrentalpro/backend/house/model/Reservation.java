@@ -1,6 +1,7 @@
 package com.smatech.smatrentalpro.backend.house.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.smatech.smatrentalpro.backend.commons.AbstractEntity;
 import com.smatech.smatrentalpro.backend.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -16,8 +18,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name="reservation")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Reservation  {
-
+public class Reservation {
 
     @Id
     @GeneratedValue(generator = "uuid")
@@ -25,22 +26,22 @@ public class Reservation  {
     @Column(name = "reservation_id", nullable = false, updatable = false)
     private String reservationId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="id", nullable = false)
-    private House bookedHome;
 
-    @Column(name = "booked_date", nullable = false)
+    @Column(name ="bookedHome")
+    private String bookedHome;
+
+    @Column(name = "booked_date")
     private LocalDate bookedDate;
 
-    @Column(name = "leave_date", nullable = false)
+    @Column(name = "leave_date")
     private LocalDate leaveDate;
 
     @Column(name = "booked")
     private int booked;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="user_id", nullable = false)
-    private User userBooked;
+
+    @Column(name ="userBooked")
+    private Integer userBooked;
 
     @Column(name = "host_review_stars")
     private Integer hostReviewStars;
@@ -53,4 +54,41 @@ public class Reservation  {
 
     @Column(name = "home_review_description")
     private String homeReviewDescription;
+
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "reservationId='" + reservationId + '\'' +
+                ", bookedHome='" + bookedHome + '\'' +
+                ", bookedDate=" + bookedDate +
+                ", booked=" + booked +
+                ", userBooked='" + userBooked + '\'' +
+                ", hostReviewStars=" + hostReviewStars +
+                ", hostReviewDescription='" + hostReviewDescription + '\'' +
+                ", homeReviewStars=" + homeReviewStars +
+                ", homeReviewDescription='" + homeReviewDescription + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Reservation)) return false;
+        Reservation that = (Reservation) o;
+        return booked == that.booked &&
+                Objects.equals(reservationId, that.reservationId) &&
+                Objects.equals(bookedHome, that.bookedHome) &&
+                Objects.equals(bookedDate, that.bookedDate) &&
+                Objects.equals(userBooked, that.userBooked) &&
+                Objects.equals(hostReviewStars, that.hostReviewStars) &&
+                Objects.equals(hostReviewDescription, that.hostReviewDescription) &&
+                Objects.equals(homeReviewStars, that.homeReviewStars) &&
+                Objects.equals(homeReviewDescription, that.homeReviewDescription);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(reservationId, bookedHome, bookedDate, booked, userBooked, hostReviewStars, hostReviewDescription, homeReviewStars, homeReviewDescription);
+    }
 }

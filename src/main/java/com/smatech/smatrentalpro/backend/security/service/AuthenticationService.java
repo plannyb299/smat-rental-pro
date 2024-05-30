@@ -100,6 +100,9 @@ public class AuthenticationService {
         .accessToken(jwtToken)
             .refreshToken(refreshToken)
             .username(user.getUsername())
+            .image(user.getImage())
+            .role(user.getRole())
+            .userId(user.getId())
         .build();
   }
 

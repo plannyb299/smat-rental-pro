@@ -11,4 +11,8 @@ import java.util.Optional;
 public interface ReservationRepository extends JpaRepository<Reservation, String> {
     List<Reservation> findAll();
     Optional<Reservation> findById(String id);
+
+    List<Reservation> findByUserBooked(Integer userBooked);
+
+
 }

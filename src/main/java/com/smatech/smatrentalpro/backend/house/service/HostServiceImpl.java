@@ -286,35 +286,35 @@ public class HostServiceImpl implements HostService {
     }
 
 
-    private List<House> filterHomeListByReservationDates(LocalDate imerominiaAfixis, LocalDate imerominiaAnaxwrisis, List<House> tempListWithAllHomes) {
-        List<House> filteredList = new ArrayList<>();
-        int einaiHImerominiaAfixisPrinTinImerominiaAfixisApoDB = 0;
-        int einaiHImerominiaAfixisMetaTinImerominiaAnaxwrisisApoDB = 0;
-        int einaiHImerominiaAnaxwrisisPrinTinImerominiaAfixisApoDB = 0;
-        int einaiHImerominiaAnaxwrisisMetaTinImerominiaAnaxwrisisApoDB = 0;
-
-        for (int i = 0; i < tempListWithAllHomes.size(); i++) {
-
-            //an den iparxei kratisi gia to spiti tote mporei na ginei book opoiadhpote hmeromhnia
-            if (tempListWithAllHomes.get(i).getReservations().isEmpty()) {
-                filteredList.add(tempListWithAllHomes.get(i));
-            }
-
-            for (int j = 0; j < tempListWithAllHomes.get(i).getReservations().size(); j++) {
-                einaiHImerominiaAfixisPrinTinImerominiaAfixisApoDB = checkBookingArrivalInReservations(imerominiaAfixis, tempListWithAllHomes.get(i).getReservations(), j);
-                einaiHImerominiaAfixisMetaTinImerominiaAnaxwrisisApoDB = checkBookingLeaveInReservations(imerominiaAfixis, tempListWithAllHomes.get(i).getReservations(), j);
-
-                einaiHImerominiaAnaxwrisisPrinTinImerominiaAfixisApoDB = checkBookingArrivalInReservations(imerominiaAnaxwrisis, tempListWithAllHomes.get(i).getReservations(), j);
-                einaiHImerominiaAnaxwrisisMetaTinImerominiaAnaxwrisisApoDB = checkBookingLeaveInReservations(imerominiaAnaxwrisis, tempListWithAllHomes.get(i).getReservations(), j);
-            }
-
-            if ((einaiHImerominiaAfixisPrinTinImerominiaAfixisApoDB > 0 || einaiHImerominiaAfixisMetaTinImerominiaAnaxwrisisApoDB < 0) &&
-                    (einaiHImerominiaAnaxwrisisPrinTinImerominiaAfixisApoDB > 0 || einaiHImerominiaAnaxwrisisMetaTinImerominiaAnaxwrisisApoDB < 0)) {
-                filteredList.add(tempListWithAllHomes.get(i));
-            }
-        }
-        return filteredList;
-    }
+//    private List<House> filterHomeListByReservationDates(LocalDate imerominiaAfixis, LocalDate imerominiaAnaxwrisis, List<House> tempListWithAllHomes) {
+//        List<House> filteredList = new ArrayList<>();
+//        int einaiHImerominiaAfixisPrinTinImerominiaAfixisApoDB = 0;
+//        int einaiHImerominiaAfixisMetaTinImerominiaAnaxwrisisApoDB = 0;
+//        int einaiHImerominiaAnaxwrisisPrinTinImerominiaAfixisApoDB = 0;
+//        int einaiHImerominiaAnaxwrisisMetaTinImerominiaAnaxwrisisApoDB = 0;
+//
+//        for (int i = 0; i < tempListWithAllHomes.size(); i++) {
+//
+//            //an den iparxei kratisi gia to spiti tote mporei na ginei book opoiadhpote hmeromhnia
+//            if (tempListWithAllHomes.get(i).getReservations().isEmpty()) {
+//                filteredList.add(tempListWithAllHomes.get(i));
+//            }
+//
+//            for (int j = 0; j < tempListWithAllHomes.get(i).getReservations().size(); j++) {
+//                einaiHImerominiaAfixisPrinTinImerominiaAfixisApoDB = checkBookingArrivalInReservations(imerominiaAfixis, tempListWithAllHomes.get(i).getReservations(), j);
+//                einaiHImerominiaAfixisMetaTinImerominiaAnaxwrisisApoDB = checkBookingLeaveInReservations(imerominiaAfixis, tempListWithAllHomes.get(i).getReservations(), j);
+//
+//                einaiHImerominiaAnaxwrisisPrinTinImerominiaAfixisApoDB = checkBookingArrivalInReservations(imerominiaAnaxwrisis, tempListWithAllHomes.get(i).getReservations(), j);
+//                einaiHImerominiaAnaxwrisisMetaTinImerominiaAnaxwrisisApoDB = checkBookingLeaveInReservations(imerominiaAnaxwrisis, tempListWithAllHomes.get(i).getReservations(), j);
+//            }
+//
+//            if ((einaiHImerominiaAfixisPrinTinImerominiaAfixisApoDB > 0 || einaiHImerominiaAfixisMetaTinImerominiaAnaxwrisisApoDB < 0) &&
+//                    (einaiHImerominiaAnaxwrisisPrinTinImerominiaAfixisApoDB > 0 || einaiHImerominiaAnaxwrisisMetaTinImerominiaAnaxwrisisApoDB < 0)) {
+//                filteredList.add(tempListWithAllHomes.get(i));
+//            }
+//        }
+//        return filteredList;
+//    }
 
     private int checkBookingArrivalInReservations(LocalDate bookDate, List<Reservation> reservationDtoList, int i) {
         return reservationDtoList
@@ -323,12 +323,12 @@ public class HostServiceImpl implements HostService {
                 .compareTo(bookDate);
     }
 
-    private int checkBookingLeaveInReservations(LocalDate bookDate, List<Reservation> reservationDtoList, int i) {
-        return reservationDtoList
-                .get(i)
-                .getLeaveDate()
-                .compareTo(bookDate);
-    }
+//    private int checkBookingLeaveInReservations(LocalDate bookDate, List<Reservation> reservationDtoList, int i) {
+//        return reservationDtoList
+//                .get(i)
+//                .getLeaveDate()
+//                .compareTo(bookDate);
+//    }
 
 
     private List<HouseResponse> filterHomeListByDistance(List<HouseResponse> homeList, double givenLat, double givenLong) {
