@@ -90,6 +90,23 @@ public class PublicController {
         )));
     }
 
+    @GetMapping("/homeByPriceAndCity")
+    public ResponseEntity<List<HouseResponse>> getHomesByPriceAndLocation(
+            @RequestParam String minPrice,
+            @RequestParam String maxPrice,
+            @RequestParam @Nullable String city
+    ) throws JsonProcessingException, ParseException {
+        if(minPrice.isEmpty())minPrice="0.0";
+        if(maxPrice.isEmpty())maxPrice="0.0";
+        assert city != null;
+        if(city.isEmpty())city="Harare";
+        return ResponseEntity.ok().body(hostService.findAllWithCityAndPrice(
+                city,
+                minPrice,
+                maxPrice
+        ));
+    }
+
     @PostMapping("/homes/more")
     public ResponseEntity<String> getHomesByMoreFilters(
             @RequestBody @Nullable AllHomesList allHomesList,

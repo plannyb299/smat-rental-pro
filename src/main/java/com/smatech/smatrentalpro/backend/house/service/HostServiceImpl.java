@@ -167,6 +167,37 @@ public class HostServiceImpl implements HostService {
     }
 
     @Override
+    public List<HouseResponse> findAllWithCityAndPrice(String city, String minPrice, String maxPrice) {
+//        AllHomesList allHomesList = new AllHomesList();
+
+        List<HouseResponse> allHomesList = new ArrayList<>();
+
+        List<HouseResponse> tempListWithAllHomes = houseRepository.findAll()
+                .stream()
+                .map(HouseProcessor::convertToDto)
+                .collect(Collectors.toList());
+
+
+
+        List<HouseResponse> filteredHomeListByLocation = (filterHomeListByHomeCity(tempListWithAllHomes, city));
+
+
+        List<HouseResponse> filteredHomeListByMinPrice = (filterHomeListByMinRent(Double.parseDouble(minPrice), filteredHomeListByLocation));
+
+        List<HouseResponse> filteredHomeListByMaxPrice = (filterHomeListByMaxRent(Double.parseDouble(maxPrice), filteredHomeListByMinPrice));
+
+
+
+
+        //sort by price
+        List<HouseResponse> sortedHomesByPrice = sortHomesByPrice(filteredHomeListByMaxPrice);
+
+        allHomesList.addAll(sortedHomesByPrice);
+        log.info("AllHomesList:{}",allHomesList.toString());
+        return allHomesList;
+    }
+
+    @Override
     public AllHomesList findAllUsingMoreFilters(AllHomesList allHomesList,
                                                 String maxPrice,
                                                 String minPrice,
@@ -179,36 +210,45 @@ public class HostServiceImpl implements HostService {
                                                 Boolean ac,
                                                 String type
     ) {
+
+        List<HouseResponse> tempListWithAllHomes = houseRepository.findAll()
+                .stream()
+                .map(HouseProcessor::convertToDto)
+                .collect(Collectors.toList());
+
+        for(HouseResponse res: tempListWithAllHomes) {
+            allHomesList.add(res);
+        }
         //filter homes by max price
         if (maxPrice != null) {
-            allHomesList.setHomes(filterHomeListByMaxPrice(Double.parseDouble(maxPrice), allHomesList.getHomes()));
+            allHomesList.setHomes(filterHomeListByMaxPrice(Double.parseDouble(maxPrice), tempListWithAllHomes));
         }
         if (minPrice != null) {
-            allHomesList.setHomes(filterHomeListByMinPrice(Double.parseDouble(minPrice), allHomesList.getHomes()));
+            allHomesList.setHomes(filterHomeListByMinPrice(Double.parseDouble(minPrice), tempListWithAllHomes));
         }
         if (wifi != null) {
-            allHomesList.setHomes(filterHomeListByWifi(allHomesList.getHomes(), wifi));
+            allHomesList.setHomes(filterHomeListByWifi(tempListWithAllHomes, wifi));
         }
         if (elevator != null) {
-            allHomesList.setHomes(filterHomeListByElevator(allHomesList.getHomes(), elevator));
+            allHomesList.setHomes(filterHomeListByElevator(tempListWithAllHomes, elevator));
         }
         if (kitchen != null) {
-            allHomesList.setHomes(filterHomeListByKitchen(allHomesList.getHomes(), kitchen));
+            allHomesList.setHomes(filterHomeListByKitchen(tempListWithAllHomes, kitchen));
         }
         if (parking != null) {
-            allHomesList.setHomes(filterHomeListByParking(allHomesList.getHomes(), parking));
+            allHomesList.setHomes(filterHomeListByParking(tempListWithAllHomes, parking));
         }
         if (tv != null) {
-            allHomesList.setHomes(filterHomeListByTv(allHomesList.getHomes(), tv));
+            allHomesList.setHomes(filterHomeListByTv(tempListWithAllHomes, tv));
         }
         if (ac != null) {
-            allHomesList.setHomes(filterHomeListByAc(allHomesList.getHomes(), ac));
+            allHomesList.setHomes(filterHomeListByAc(tempListWithAllHomes, ac));
         }
         if (type != null) {
-            allHomesList.setHomes(filterHomeListByHomeType(allHomesList.getHomes(), type));
+            allHomesList.setHomes(filterHomeListByHomeType(tempListWithAllHomes, type));
         }
         if (city != null) {
-            allHomesList.setHomes(filterHomeListByHomeCity(allHomesList.getHomes(), city));
+            allHomesList.setHomes(filterHomeListByHomeCity(tempListWithAllHomes, city));
         }
         return allHomesList;
     }
@@ -221,7 +261,7 @@ public class HostServiceImpl implements HostService {
 
     private List<HouseResponse> filterHomeListByHomeCity(List<HouseResponse> tempListWithAllHomes, String city) {
         return tempListWithAllHomes.stream()
-                .filter(t -> t.getLocation().getCity().equals(city))
+                .filter(t -> t.getLocation().getCity().equalsIgnoreCase(city))
                 .collect(Collectors.toList());
     }
 
@@ -275,9 +315,22 @@ public class HostServiceImpl implements HostService {
 
     private List<HouseResponse> filterHomeListByMinPrice(Double minPrice, List<HouseResponse> tempListWithAllHomes) {
         return tempListWithAllHomes.stream()
-                .filter(t -> t.getPrice() <= minPrice)
+                .filter(t -> t.getPrice() >= minPrice)
                 .collect(Collectors.toList());
     }
+
+    private List<HouseResponse> filterHomeListByMaxRent(Double maxPrice, List<HouseResponse> tempListWithAllHomes) {
+        return tempListWithAllHomes.stream()
+                .filter(t -> t.getRent() <= maxPrice)
+                .collect(Collectors.toList());
+    }
+
+    private List<HouseResponse> filterHomeListByMinRent(Double minPrice, List<HouseResponse> tempListWithAllHomes) {
+        return tempListWithAllHomes.stream()
+                .filter(t -> t.getRent() >= minPrice)
+                .collect(Collectors.toList());
+    }
+
 
     private List<HouseResponse> sortHomesByPrice(List<HouseResponse> tempListWithAllHomes) {
         return tempListWithAllHomes.stream()

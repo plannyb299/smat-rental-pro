@@ -33,6 +33,8 @@ public interface HostService {
                                      Date bookDate,
                                      Date leaveDate);
 
+    List<HouseResponse> findAllWithCityAndPrice(String city, String minPrice, String maxPrice);
+
     AllHomesList findAllUsingMoreFilters(AllHomesList allHomesList,
                                          String maxPrice,
                                          String minPrice,
